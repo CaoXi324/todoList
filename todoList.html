@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TODO LIST</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="todoList.css" />
+
+</head>
+
+<body>
+    <div id="outBox">
+        <div id="inputBox">
+            <p>TODO LIST</p>
+            <a>添加待办事项<input type="text" id="input"><button id="save">确认</button></a>
+        </div>
+        <div>
+            <ul id="todoList">
+            </ul>
+        </div>
+        <div id="btn">
+            <button id="all">ALL</button>
+            <button id="active">ACTIVE</button>
+            <button id="completed">COMPLETED</button>
+            <button id="clearCompleted">CLEAR COMPLETED</button>
+        </div>
+        <div id="leftItems">Left Items:<a id="num">0</a></div>
+    </div>
+
+
+
+
+    <script type="text/javascript" src="./operation.js"></script>
+    <script type="text/javascript" src="./input.js"></script>
+    <script type="text/javascript" src="./database.js"></script>
+    <script type="text/javascript" src="./listener.js"></script>
+
+
+
+</body>
+
+</html>

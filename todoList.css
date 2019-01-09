@@ -1,0 +1,66 @@
+#outBox {
+    width: 600px;
+    background-color: #f8e9e9;
+    padding: 10px 20px;
+}
+#inputBox p {
+    text-align: center;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 200%;
+}
+#todoList {
+    list-style: none;
+    margin: 10px 0px;
+    padding: 0;
+    width: 600px;
+}
+
+#todoList li {
+    margin-bottom: 5px;
+    padding: 10px;
+    border: 1px solid#fdd0d0;
+    background: #fdd0d0;
+    position: relative;
+}
+
+input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #dfdbdb;
+    margin: 10px 30px;
+    width: 300px;
+}
+
+#btn {
+    padding: 10px 50px;
+}
+
+button {
+    padding: 10px 20px;
+    border: 1px solid #dfdbdb;
+    background: #dfdbdb;
+    outline: none;
+    cursor: pointer;
+}
+
+#leftItems {
+    padding: 10px 50px;
+}
+#deleLine {
+    text-decoration: line-through;
+    color: gray;
+ }
+
+#todoList span {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    display: none;
+}
+#todoList li:hover span {
+    display: inline;
+}
+
+
+
+
