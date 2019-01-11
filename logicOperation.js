@@ -1,142 +1,90 @@
-var id = Date.now();
-var isCompleted = false;
-var todoList = [];
 
-
-function saveItem() {
-    addItem();
-    showItem();
-    showItemNum();
-}
-
-function addItem() {
-    let obj_list = {
-        todo: "",
-        done: false,
-        id: Date.now()
-    };
-    if (isCompleted) {
-        obj_list.done = true;
-    }
+function saveTodo() {
     if (document.getElementById("input").value.length === 0) {
         return -1;
     }
-
-    obj_list.todo = document.getElementById("input").value.trim();
-    todoList.push(obj_list);
-
-    saveData(todoList);
-
+    let todo = {
+        content: document.getElementById("input").value.trim(),
+        done: false,
+        id: Date.now()
+    };
+    saveData(todo);
     document.getElementById("input").value = "";
-
 }
 
-function showItem() {
-    if (loadData().length > 1) {
-        showItemNum();
-    }
-    let newAdd = loadData().length;
-    if (isCompleted) {
-        return -1;
-    }
-    var li = document.createElement('li');
-    li.innerHTML = loadData()[newAdd - 1].todo;
-    li.onclick = function () { changeStatus(li) };
-
-    var span = document.createElement('span');
-    span.innerHTML = '&times;';
-    li.appendChild(span);
-    document.getElementById('todoList').appendChild(li);
-
-}
-function changeColor(label) {
-    label.setAttribute('class', 'style2');
+function showNewTodo() {
+    let todos = loadData();
+    showLis(todos);
 }
 
-
-
-
-function completed() {
-    isCompleted = true;
-    document.getElementById('completed').style.backgroundColor = 'pink';
-    document.getElementById('all').style.backgroundColor = '';
-    document.getElementById('active').style.backgroundColor = '';
+function showLis(todos) {
+    let lis = createLiTag(todos);
+    showLiTag(lis);
 }
 
-function showAll() {
+function createLiTag(todos) {
+    return todos.map(ele =>
+        `<li id=${ele.id} onclick="changeStatus(event)">${ele.content}<span onclick="deletodo(event)">&times</span></li>`
+    );
+}
+
+function showLiTag(todos) {
+    document.getElementById('todoList').innerHTML = todos.join('\n');
+}
+
+function showTodos(status) {
+    let todos = loadData();
     document.getElementById('completed').style.backgroundColor = '';
-    document.getElementById('all').style.backgroundColor = 'pink';
     document.getElementById('active').style.backgroundColor = '';
-    clearAll();
-    showTodoList(loadData());
-
-
-}
-
-function clearAll() {
-    var allItems = document.getElementsByTagName('li');
-    if (allItems.length > 0) {
-        do {
-            document.getElementById('todoList').removeChild(allItems[0]);
-        }
-        while (allItems.length > 0)
+    document.getElementById('all').style.backgroundColor = '';
+    document.getElementById(`${status}`).style.backgroundColor = 'pink';
+    switch (status) {
+        case 'completed':
+            todos = todos.filter(ele => ele.done === true);
+            break;
+        case 'active':
+            todos = todos.filter(ele => ele.done === false);
+            break;
     }
-
+    showLis(todos);
 }
 
-function showTodoList(array) {
-    for (let i = 0; i < array.length; i++) {
-        var li = document.createElement('li');
-        li.innerHTML = array[i].todo;
-        li.onclick = function () { changeStatus(li) };
-        var span = document.createElement('span');
-        span.innerHTML = '&times;';
-        li.appendChild(span);
-        document.getElementById('todoList').appendChild(li);
-    }
-
-}
 
 function clearCompleted() {
-    todoList = loadData().filter(item => item.done === false);
-    localStorage.clear();
-    saveData(todoList);
-    showAll();
-    showItemNum();
+    let todos = loadData();
+    let undoList = todos.filter(ele => ele.done === false);
+    saveActiveTodo(undoList);
+    showLis(undoList);
+    showTodoNum();
+}
+
+function showTodoNum() {
+    let todos = loadData();
+    document.getElementById('num').innerHTML = todos.length;
 }
 
 
-function showActive() {
-    document.getElementById('completed').style.backgroundColor = '';
-    document.getElementById('all').style.backgroundColor = '';
-    document.getElementById('active').style.backgroundColor = 'pink';
-    isCompleted = false;
-    clearAll();
-    activeTodoList = loadData().filter(ele => ele.done === false);
-    showTodoList(activeTodoList);
-}
-
-function showItemNum() {
-    document.getElementById('num').innerHTML = loadData().length;
-}
-
-
-
-
-document.getElementById('todoList').onclick = function (event) {
-    if (event.target.nodeName === 'SPAN') {
-        this.removeChild(event.target.parentNode);
-        let indexOfItem = loadData().indexOf(ele => ele.todo === event.target.parentNode.innerHTML);
-        loadData()[indexOfItem].done = true;
-        saveData(loadData());
-
+function deletodo(event) {
+        let todos = loadData();
+        let todoIndex = todos.findIndex(ele => ele.id === event.target.parentNode.id);
+        todos.splice(todoIndex, 1);
+        saveActiveTodo(todos);
+        showLis(todos);
+        showTodoNum();
     }
-}
 
-function changeStatus(li) {
-    li.setAttribute("id", "deleLine");
-    let indexOfItem = loadData().indexOf(ele => ele.todo === li.innerHTML);
-    loadData()[indexOfItem].done = true;
-    saveData(loadData());
-    showItemNum();
+
+function changeStatus(event) {
+    event.target.setAttribute("class", "deleLine");
+    let todos = loadData();
+    let activeTodos = [];
+    console.log(event.target.id);
+    for (let i = 0; i < todos.length; i++) {
+        if (todos[i].id == event.target.id) {
+            todos[i].done = true;
+        }
+        activeTodos.push(todos[i]);
+    }
+    saveActiveTodo(activeTodos);
+    showTodoNum();
 }
